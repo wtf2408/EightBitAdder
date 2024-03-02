@@ -1,2 +1,2 @@
-# BitAdder by Evseev Bogdan
+# Eight Bit Adder by Evseev Bogdan
 ---
