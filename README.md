@@ -1,1 +1,2 @@
-# BitAdder
+# BitAdder by Evseev Bogdan
+---
