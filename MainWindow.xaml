@@ -1,0 +1,205 @@
+﻿<Window x:Class="BitAdder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BitAdder"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Height="480" Width="720">
+    <Window.DataContext>
+        <local:Adder/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <sys:Byte x:Key="byte"/>
+
+        <Style x:Key="SwitcherStyle" 
+               TargetType="CheckBox" 
+               BasedOn="{StaticResource MaterialDesignSwitchToggleButton}">
+            <Setter Property="Margin" 
+                    Value="8"/>
+            <Style.Triggers>
+                <Trigger Property="Background" Value="DeepPink">
+                    <Setter Property="ToolTip" Value="Бит знака"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BinViewTextBlock"
+               TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBoxStyle"
+               TargetType="TextBox"
+               BasedOn="{StaticResource  MaterialDesignTextBox}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/> 
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="Некорректно введенное значение" />
+                </Trigger>
+                
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <materialDesign:Card UniformCornerRadius="15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="7*"/>
+            </Grid.RowDefinitions>
+
+            
+            <!--Top Bar-->
+            <Grid Grid.ColumnSpan="2"
+                  Grid.Row="0">
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        HorizontalAlignment="Right"
+                        Click="CloseWindow">
+                    <materialDesign:PackIcon Kind="Close"/>
+                </Button>
+            </Grid>
+
+            <!--Sign Mode Switcher-->
+            <StackPanel Grid.Row="1" Grid.Column="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <CheckBox Content="Sign Mode"
+                          Click="SignModeSwitch" 
+                          Name="SingModeSwitcher"
+                          FontSize="16"
+                          />
+                <TextBlock FontSize="14">
+                    <Run Text="{Binding MinValue, Mode=OneWay, StringFormat= от {0}}"/>
+                    <Run Text="{Binding MaxValue, Mode=OneWay, StringFormat= до {0}}"/>
+                </TextBlock>
+            </StackPanel>
+
+            <!--User Input Area-->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1" 
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <StackPanel Orientation="Vertical"
+                            Margin="15 0">
+                    <TextBlock Text="First Number"
+                               FontSize="16"/>
+                    <TextBox Name="FirstNumberTextBox"
+                             Text="{Binding FirstNumber, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                
+                <Button Content="+"  
+                        VerticalAlignment="Center"
+                        Click="Add" />
+                
+                <StackPanel Orientation="Vertical"
+                            Margin="15 0">
+                    <TextBlock Text="Second Number"
+                               FontSize="16"/>
+                    <TextBox Name="SecondNumberTextBox"
+                             Text="{Binding SecondNumber, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource TextBoxStyle}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Vertical"
+                            Margin="15 0">
+                    <TextBlock Text="Result"
+                               FontSize="16"/>
+                    <TextBlock VerticalAlignment="Center"  
+                               FontSize="16"
+                               Margin="0 3 0 0"
+                               Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" 
+                               Name="ResultTextBlock"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!--First Number View Area-->
+            <TextBlock Grid.Column="0"
+                       Grid.Row="2"
+                       Style="{StaticResource BinViewTextBlock}"
+                       Text="{Binding FirstNumber, StringFormat=\{0:b8\}, UpdateSourceTrigger=PropertyChanged}"
+                       HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Name="FirstNumberSwitchPanel">
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+            </StackPanel>
+            
+            
+            <!--Second Number View Area-->
+            <TextBlock Grid.Column="0"
+                       Grid.Row="3"
+                       Text="{Binding SecondNumber, StringFormat=\{0:b8\}, UpdateSourceTrigger=PropertyChanged}" 
+                       Style="{StaticResource BinViewTextBlock}"/>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Name="SecondNumberSwitchPanel">
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+            </StackPanel>
+            
+            
+            <!--Result Number View Area-->
+            <TextBlock Grid.Column="0"
+                       Grid.Row="4"
+                       Text="{Binding Result, StringFormat=\{0:b8\}, UpdateSourceTrigger=PropertyChanged}" 
+                       Style="{StaticResource BinViewTextBlock}"/>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Name="ResultNumberSwitchPanel">
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+                <CheckBox Style="{StaticResource SwitcherStyle}"/>
+            </StackPanel>
+        </Grid>
+    </materialDesign:Card>
+
+    
+</Window>
